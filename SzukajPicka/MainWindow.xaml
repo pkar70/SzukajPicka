@@ -1,0 +1,110 @@
+﻿<Window x:Class="MainWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:SzukajPicka"
+        mc:Ignorable="d"
+        Title="Pic finder" Height="800" Width="1000" Loaded="Window_Loaded" Name="uiMainWin">
+    <Grid Name="uiGrid">
+        <Grid.RowDefinitions>
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="Auto" />
+            <RowDefinition Height="*" />
+            <RowDefinition Height="Auto" />
+        </Grid.RowDefinitions>
+        
+        <TextBlock HorizontalAlignment="Center" FontSize="20" Text="Pic finder" />
+        <StackPanel Grid.Row="1" >
+
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition />
+                    <ColumnDefinition />
+                </Grid.ColumnDefinitions>
+                <ToggleButton Content="Query" HorizontalAlignment="Left" Click="uiOpenQuery_Click"/>
+                <ToggleButton Content="Folders" HorizontalAlignment="Right" Click="uiFolders_Click"/>
+                <ComboBox Name="uiComboSize" Grid.Column="1" HorizontalAlignment="Right" >
+                    <ComboBoxItem Content="fit" IsSelected="true" />
+                    <ComboBoxItem Content="480" />
+                    <ComboBoxItem Content="320" />
+                    <ComboBoxItem Content="240" />
+                    <ComboBoxItem Content="160" />
+                </ComboBox>
+            </Grid>
+            
+            <Grid Name="uiQuery" Visibility="Collapsed" >
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="Auto" />
+                </Grid.ColumnDefinitions>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto"/> <!-- hdr -->
+                </Grid.RowDefinitions>
+                <TextBlock Text="TAK" Width="30" Grid.Row="0" Grid.Column="0"/>
+                <TextBlock Text="NIE" Width="30" Grid.Row="0" Grid.Column="2"/>
+
+                <TextBox Grid.Row="0" Grid.Column="0" Name="uiMaskTak"/>
+                <TextBox Grid.Row="0" Grid.Column="2" Name="uiMaskNie"/>
+                <TextBox Grid.Row="0" Grid.Column="0" Name="uiMaskTak2"/>
+                <TextBox Grid.Row="0" Grid.Column="2" Name="uiMaskNie2"/>
+
+                <Button Content="Find!" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="0" Click="uiRunQuery_Click" Name="uiRunQuery"/>
+                <TextBlock HorizontalAlignment="Center" Name="uiCount" Grid.Row="0" Grid.Column="1" />
+                <Button Content="Show!" HorizontalAlignment="Center" Grid.Row="0" Grid.Column="2" Click="uiShowPics_Click" Name="uiShowPics"/>
+
+            </Grid>
+            <Grid Name="uiFolders" Visibility="Collapsed" >
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="Auto" />
+                    <RowDefinition Height="Auto" />
+                </Grid.RowDefinitions>
+                <ListView Name="uiFolderList" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" >
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <CheckBox Content="{Binding sDirName, Mode=OneWay }" IsChecked="{Binding bChecked, Mode=TwoWay }" Checked="uiPoliczPasujace" Unchecked="uiPoliczPasujace" MouseDoubleClick="uiFolderOnlyThis"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+
+                <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock HorizontalAlignment="Center" Name="uiCountFold" Grid.Column="0" />
+                    <Button Content="Show!" Grid.Column="1" Click="uiShowPics_Click"/>
+                </Grid>
+            </Grid>
+        </StackPanel>
+        <ListView Name="uiPicList" Grid.Row="2" 
+                      ScrollViewer.HorizontalScrollBarVisibility="Disabled" 
+                      ScrollViewer.VerticalScrollBarVisibility="Auto" >
+
+                <ListView.ItemTemplate>
+                    <DataTemplate>
+                    <Image Source="{Binding oImageSrc, Mode=OneWay }" Height="{Binding iDuzoscH, Mode=OneWay }" ToolTipService.ToolTip="{Binding sDymek, Mode=OneWay }" ToolTipService.ShowDuration="30000" >
+                        <Image.ContextMenu>
+                            <ContextMenu>
+                                <MenuItem Header="copy path" Click="uiCopyPath_Click" />
+                                <MenuItem Header="rename..." Click="uiRenamePic_Click"/>
+                                <MenuItem Header="hide" Click="uiHidePic_Click"/> 
+                                <MenuItem Header="move dublet" Click="uiDubletPic_Click"/>
+                                <MenuItem Header="show big" Click="uiShowBig_Click"/>
+                            </ContextMenu>
+                        </Image.ContextMenu>
+                    </Image>
+                </DataTemplate>
+                </ListView.ItemTemplate>
+            <ItemsControl.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <WrapPanel Orientation="Horizontal"></WrapPanel>
+                </ItemsPanelTemplate>
+                </ItemsControl.ItemsPanel>
+        </ListView>
+
+        <ProgressBar Name="uiPrgBar" Grid.Row="3" Visibility="Collapsed" Height="8" />
+    </Grid>
+</Window>
