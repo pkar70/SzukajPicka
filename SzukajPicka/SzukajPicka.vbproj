@@ -132,4 +132,8 @@
     <None Include="App.config" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.VisualBasic.targets" />
+  <ItemGroup>
+    <None Include="$(MSBuildThisFileDirectory)_changes.txt" />
+    <None Include="$(MSBuildThisFileDirectory)_tudus.txt" />
+  </ItemGroup>
 </Project>
